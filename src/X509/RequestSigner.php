@@ -8,6 +8,7 @@ use Bip70\Protobuf\Codec\NonDiscardingBinaryCodec;
 use Bip70\Protobuf\Proto\PaymentDetails;
 use Bip70\Protobuf\Proto\PaymentRequest;
 use Bip70\Protobuf\Proto\X509Certificates;
+use DrSlump\Protobuf\Codec\Binary as BinaryCodec;
 use Sop\CryptoBridge\Crypto;
 use Sop\CryptoTypes\AlgorithmIdentifier\Feature\AsymmetricCryptoAlgorithmIdentifier;
 use Sop\CryptoTypes\Asymmetric\PrivateKeyInfo;
@@ -61,7 +62,7 @@ class RequestSigner implements RequestSignerInterface
         $request->setSerializedPaymentDetails($details->serialize());
         $request->setSignature('');
 
-        $data = $request->serialize(new NonDiscardingBinaryCodec());
+        $data = $request->serialize(new BinaryCodec());
         $signature = $this->crypto->sign($data, $privateKey, $signAlgorithm);
 
         $request->setSignature($signature->bitString()->string());
